@@ -71,7 +71,7 @@ abstract class Vehicle
    * @param int
    * @return int The model year just set
    */
-  public function setYear($year = '0') {
+  public function setYear($year = 0) {
     return $this->_year = $year;
   }
   

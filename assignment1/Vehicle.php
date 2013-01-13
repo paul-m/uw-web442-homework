@@ -3,6 +3,16 @@
  * Abstract class to represent vehicle
  */
 
+/**
+ * We create a new type of exception to throw for vehicles.
+ */
+class NonExistantVehicleException extends Exception { }
+
+/**
+ * Our abstract Vehicle class.
+ *
+ * Will throw an exception if you don't override the constructor.
+ */
 abstract class Vehicle
 {
   /**
@@ -22,9 +32,13 @@ abstract class Vehicle
    * @param int Model Year
    * @param int Doors
    */
-  public function __construct($modelYear = 0, $doors = 0) {
+  public function __construct($modelYear = -1, $doors = -1) {
     $this->setYear($modelYear);
     $this->setNumberOfDoors($doors);
+    
+    if (($this->getNumberOfDoors() < 0) || ($this->getYear() < 0)) {
+      throw new NonExistantVehicleException('Vehicles must have a model year and doors.');
+    }
   }
   
   /**

@@ -1,0 +1,12 @@
+{
+    "name": "paul/lab2",
+    "authors": [
+        {
+            "name": "Paul Mitchum",
+            "email": "paul@mile23.com"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "3.7.*"
+    }
+}

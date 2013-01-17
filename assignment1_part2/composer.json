@@ -6,8 +6,11 @@
             "email": "paul@mile23.com"
         }
     ],
+    "autoload": {
+        "psr-0": {"paul-m": "Src/"}
+    },
     "require": {
         "phpunit/phpunit": "3.7.*"
     }
 }
-  
+

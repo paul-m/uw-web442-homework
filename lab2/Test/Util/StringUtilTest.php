@@ -16,14 +16,12 @@ class StringUtilTest extends \PHPUnit_Framework_TestCase {
     $this->assertFalse(StringUtil::isNullOrEmpty('abc'));
   }
 
-  public function testStringUtilNumericInvalidArgument() {
-    $this->setExpectedException('InvalidArgumentException');
-    $result = StringUtil::isNullOrEmpty(1243);
+  public function testStringUtilNumeric() {
+    $this->assertFalse(StringUtil::isNullOrEmpty(1243));
   }
 
-  public function testStringUtilArrayInvalidArgument() {
-    $this->setExpectedException('InvalidArgumentException');
-    $result = StringUtil::isNullOrEmpty(array());
+  public function testStringUtilEmptyArray() {
+    $this->assertTrue(StringUtil::isNullOrEmpty(array()));
   }
 
 }

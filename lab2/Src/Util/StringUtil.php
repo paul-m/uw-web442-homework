@@ -1,19 +1,35 @@
 <?php
 namespace Util;
 
-class StringUtil {
-  /**
-   * Is input string null or empty?
-   * @param string $value Value to check.
-   * @return boolean True if null or empty.
-   */
-  public static function isNullOrEmpty( $value = NULL ) {
-    if (NULL === $value) return TRUE;
-    if (gettype($value) != 'string') {
-      throw new \InvalidArgumentException('StringUtil::isNullOrEmpty() requires a string argument. Or NULL.');
+/**
+ * String Utility object
+ */
+class StringUtil
+{
+    /**
+     * empty array, empty string, false and null as empty.
+     * Any other values will be false
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    public static function isNullOrEmpty( $value ) {
+        if( NULL === $value )
+            return true;
+
+        if( FALSE === $value) {
+            return true;
+        }
+
+        if( "" === $value) {
+            return true;
+        }
+
+        if( is_array($value) && count($value) === 0) {
+            return true;
+        }
+
+        return false;
     }
-    if (empty($value)) return TRUE;
-    return FALSE;
-  }
 }
 

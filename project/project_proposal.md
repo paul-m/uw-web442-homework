@@ -26,11 +26,13 @@ Using http requests, users can POST and GET and DELETE data to the store based o
 
 Second Life imposes a 2k limit on data POSTed through requests, so that's our largest blob size.
 
-Limitations:
+I want to learn Symfony2 and Doctrine, so that's the framework of choice.
+
+Limitations and Weirdnesses:
 --
 
-The whole project will involve scripts in Linden Scripting Language (LSL), which is outside the class scope.
+The final product will involve Second Life scripts in Linden Scripting Language (LSL), which is outside the class scope.
 
 The class project and its tests will be a fairly large subset of the total, doing authentication and storage, without the LSL-flavored parts.
 
-The class project could implement OAuth or other sophisticated authentication systems as needed, although the final product will likely not use them. Implementing OAuth in LSL is not viable at the moment.
+The class project could implement OAuth or other sophisticated authentication systems as required, although the final product will likely not use them. Implementing OAuth in LSL is not viable at the moment.

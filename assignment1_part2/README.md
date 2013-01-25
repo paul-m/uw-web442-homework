@@ -1,12 +1,22 @@
 Assignment 1, Part 2
 ====================
 
-How to build something like this:
+By Paul Mitchum for WebLAMP 442, paul@mile23.com
 
-- Make a project directory.
-- cd to the project directory.
-- Grab composer: http://getcomposer.org/download/
-- `php ./composer.phar init` This will ask you questions and create a composer.json file.
-- Edit composer.json and add a requirement of `"phpunit/phpunit": "3.7.*"` or similar. Clues here: http://www.phpunit.de/manual/current/en/installation.html#installation.composer
-- `php ./composer.phar update` This will generate all the stuff in the vendor/ directory.
-- You are done.
+Assignment 1, Part 1: https://github.com/jayzeng/UW-PHP-course/blob/master/lecture/lecture1/assignment1.md
+
+Assignment 1, Part 2: https://github.com/jayzeng/UW-PHP-course/blob/master/lecture/lecture2/assignment1_part2.md
+
+What To Do?
+-----------
+
+This project uses composer, so get it: `curl -s https://getcomposer.org/installer | php`
+
+Make sure the dependencies and class autoloading are up to date: `php ./composer.phar -v -o install`
+
+Run the tests without coverage reporting: `php vendor/bin/phpunit -c Test/conf/phpunit.xml`
+
+Run the tests with coverage reporting: `php vendor/bin/phpunit -c Test/conf/phpunit.xml --coverage-html coverage`
+
+You can then open ./coverage/index.html in a web browser to see a nifty report. It should be 100% coverage.
+

@@ -1,12 +1,15 @@
 <?php
+namespace PaulM;
+
 /**
+ * @file
  * Abstract class to represent vehicle
  */
 
 /**
  * We create a new type of exception to throw for vehicles.
  */
-class NonExistantVehicleException extends Exception { }
+class NonExistantVehicleException extends \Exception { }
 
 /**
  * Our abstract Vehicle class.
@@ -35,12 +38,12 @@ abstract class Vehicle
   public function __construct($modelYear = -1, $doors = -1) {
     $this->setYear($modelYear);
     $this->setNumberOfDoors($doors);
-    
     if (($this->getNumberOfDoors() < 0) || ($this->getYear() < 0)) {
       throw new NonExistantVehicleException('Vehicles must have a model year and doors.');
     }
+    return $this;
   }
-  
+
   /**
    * Return the number of doors
    * @return int The number of doors

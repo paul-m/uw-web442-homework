@@ -1,4 +1,5 @@
 <?php
+namespace PaulM;
 
 /**
  * @file
@@ -6,6 +7,14 @@
  */
 
 interface VehicleInterface {
+  /**
+   * honk function.
+   *
+   * Gives vehicles a way to honk.
+   * 
+   * @access public
+   * @return void
+   */
   function honk();
 }
 

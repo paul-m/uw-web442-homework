@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Bootstrap all the testing.
+ * Bootstrap all the namespaces from composer.
  */
 
 require_once('vendor/autoload.php');

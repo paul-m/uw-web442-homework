@@ -1,12 +1,10 @@
 <?php
+namespace PaulM;
 
 /**
  * @file
  * Implement a Civic subclass of Car.
  */
-
-require_once('Car.php');
-require_once('VehicleInterface.php');
 
 class Civic extends Car implements VehicleInterface {
   /**
@@ -18,7 +16,7 @@ class Civic extends Car implements VehicleInterface {
    * @param int $doors Number of doors.
    */
   public function __construct($year = 1973, $doors = 2) {
-    parent::__construct($year, $doors);
+    return parent::__construct($year, $doors);
   }
 
   /**

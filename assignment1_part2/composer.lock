@@ -1,5 +1,5 @@
 {
-    "hash": "a1371c07d9a9f7e0f5fba521423834af",
+    "hash": "0e659f31e4e579c15879f0f19b97feaf",
     "packages": [
         {
             "name": "phpunit/php-code-coverage",
@@ -354,23 +354,23 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.1.6",
+            "version": "v2.1.7",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml",
-                "reference": "v2.1.6"
+                "reference": "v2.1.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Yaml/archive/v2.1.6.zip",
-                "reference": "v2.1.6",
+                "url": "https://github.com/symfony/Yaml/archive/v2.1.7.zip",
+                "reference": "v2.1.7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-12-06 10:00:55",
+            "time": "2013-01-17 21:21:51",
             "type": "library",
             "autoload": {
                 "psr-0": {

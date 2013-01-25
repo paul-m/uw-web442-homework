@@ -1,13 +1,13 @@
 <?php
+namespace PaulM;
 
 /**
  * @file
- * Implement a Car subclass of Vehicle.
+ * Implement a Truck subclass of Vehicle.
  */
-require_once('Vehicle.php');
-require_once('VehicleInterface.php');
 
 class Truck extends Vehicle implements VehicleInterface {
+
   /**
    * Truck honk function.
    * @return string Empty string.

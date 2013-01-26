@@ -3,6 +3,8 @@ Project proposal for WebLAMP 442
 VirtualPersistAPI
 ==
 
+Note that VirtualPersistAPI now has its own github project: https://github.com/paul-m/VirtualPersistAPI
+
 What?
 --
 

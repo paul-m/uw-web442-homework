@@ -85,6 +85,32 @@ class VehicleTest
   }
 
   /**
+   * Test setter for non-integer year values.
+   *
+   * @dataProvider generateNonIntegers
+   * @expectedException \InvalidArgumentException
+   */
+  public function testNonIntegerYearSetter($a, $b) {
+    $stub = $this->getMockBuilder('PaulM\Vehicle')
+      ->setConstructorArgs(array(1,1))
+      ->getMockForAbstractClass();
+    $stub->setYear($a);
+  }
+
+  /**
+   * Test setter for non-integer door values.
+   *
+   * @dataProvider generateNonIntegers
+   * @expectedException \InvalidArgumentException
+   */
+  public function testNonIntegerDoorSetter($a, $b) {
+    $stub = $this->getMockBuilder('PaulM\Vehicle')
+      ->setConstructorArgs(array(1,1))
+      ->getMockForAbstractClass();
+    $stub->setNumberOfDoors($a);
+  }
+
+  /**
    * Test the describe method.
    */
   public function testVehicleDescribe() {

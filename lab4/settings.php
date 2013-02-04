@@ -10,7 +10,7 @@ $database = array(
   'host' => 'localhost',
   'dbname' => 'lab4',
   'username' => 'root',
-  'password' => 'ro ot',
+  'password' => 'root',
   'port' => '8889',
   );
 

@@ -8,11 +8,12 @@ class TruckTest
    * Regression test against the spec.
    */
   public function testTruckInterface() {
-    // Create a Truck object, passing some arguments so we
-    // don't generate an exception.
-    $truck = new Truck(0,0);
-    // From the spec: honk() = 'honk honk'
-    $this->assertEquals($truck->honk(), '');
+    // Truck is an abstract class, so we have to
+    // make a mock object.
+    $stub = $this->getMockBuilder('PaulM\Truck')
+      ->setConstructorArgs(array(1,1))
+      ->getMockForAbstractClass();
+    $this->assertEquals($stub->honk(), '');
   }
 }
 

@@ -6,7 +6,7 @@ namespace PaulM;
  * Implement a Truck subclass of Vehicle.
  */
 
-class Truck extends Vehicle implements VehicleInterface {
+abstract class Truck extends Vehicle implements VehicleInterface {
 
   /**
    * Truck honk function.

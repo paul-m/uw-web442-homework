@@ -13,11 +13,12 @@ class CarTest
    * @return void
    */
   public function testCarInterface() {
-    // Create a car object, passing some arguments so we
-    // don't generate an exception.
-    $car = new Car(0,0);
-    // From the spec: honk() = 'honk honk'
-    $this->assertEquals($car->honk(), '');
+    // Car is an abstract class, so we have to
+    // make a mock object.
+    $stub = $this->getMockBuilder('PaulM\Car')
+      ->setConstructorArgs(array(1,1))
+      ->getMockForAbstractClass();
+    $this->assertEquals($stub->honk(), '');
   }
 }
 

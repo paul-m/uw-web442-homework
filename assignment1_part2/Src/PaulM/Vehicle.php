@@ -36,9 +36,14 @@ abstract class Vehicle
    * @param int Doors
    */
   public function __construct($modelYear = -1, $doors = -1) {
-    $this->setYear($modelYear);
-    $this->setNumberOfDoors($doors);
-    if (($this->getNumberOfDoors() < 0) || ($this->getYear() < 0)) {
+    try {
+      $this->setYear($modelYear);
+      $this->setNumberOfDoors($doors);
+    } catch (\InvalidArgumentException $e) {
+      throw new NonExistantVehicleException('Bad constructor arguments.');
+    }
+    if (!is_int($modelYear) || !is_int($doors) ||
+      ($this->getNumberOfDoors() < 0) || ($this->getYear() < 0)) {
       throw new NonExistantVehicleException('Vehicles must have a model year and doors.');
     }
     return $this;
@@ -58,6 +63,9 @@ abstract class Vehicle
    * @return int The number of doors set
    */
   public function setNumberOfDoors($doors = 0) {
+    if (!is_int($doors)) {
+      throw new \InvalidArgumentException('Vehicle->setNumberOfDoors() requires an integer.');
+    }
     return $this->_numberOfDoors = $doors;
   }
   
@@ -75,18 +83,35 @@ abstract class Vehicle
    * @return int The model year just set
    */
   public function setYear($year = 0) {
+    if (!is_int($year)) {
+      throw new \InvalidArgumentException('Vehicle->setYear() requires an integer.');
+    }
     return $this->_year = $year;
   }
-  
+
   /**
    * Return a textual description of the vehicle.
+   *
+   * We have to do Reflection to see if we implement honk().
+   *
    * @return string
    */
   public function describe() {
-    return 'This ' . get_class($this) .
+    $method = NULL;
+    try {
+      $method = new \ReflectionMethod(get_class($this), 'honk');
+    } catch (\ReflectionException $e) {
+    }
+    $result = 'This ' . get_class($this) .
     ' is from model year ' . $this->getYear() .
     ', has ' . $this->getNumberOfDoors() .
-    ' doors, and says "' . $this->honk() . '"';
+    ' doors, ';
+    if ($method != NULL) {
+      $result .= 'and says "' . $this->honk() . '"';
+    } else {
+      $result .= 'and does not implement honk().';
+    }
+    return $result;
   }
 }
 

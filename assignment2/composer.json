@@ -1,0 +1,19 @@
+{
+    "name": "paul/assignment1_part2",
+    "authors": [
+        {
+            "name": "Paul Mitchum",
+            "email": "paul@mile23.com"
+        }
+    ],
+    "autoload": {
+      "psr-0": { "PaulM": [
+        "Src/",
+        "Test/"
+      ] }
+    },
+    "require": {
+        "phpunit/phpunit": "3.7.*"
+    }
+}
+

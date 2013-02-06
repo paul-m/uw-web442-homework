@@ -5,6 +5,14 @@ By Paul Mitchum for WebLAMP 442, paul@mile23.com
 
 Assignment 2: https://github.com/jayzeng/UW-PHP-course/blob/master/lecture/lecture4/assignment2.md
 
+Design
+------
+
+We're adapting a PDO object to make it even more neutral than it already is. We want to be the testable layer between an entity model and the database. We'll completely obscure the DB layer through abstraction, except for the table and column names.
+
+We define a schema, but only so we can use PDO to sanitize against SQL injection.
+
+
 What To Do?
 -----------
 

@@ -102,7 +102,7 @@ abstract class Vehicle
       $method = new \ReflectionMethod(get_class($this), 'honk');
     } catch (\ReflectionException $e) {
     }
-    $result = 'This ' . get_class($this) .
+    $result = 'I changed this. This ' . get_class($this) .
     ' is from model year ' . $this->getYear() .
     ', has ' . $this->getNumberOfDoors() .
     ' doors, ';

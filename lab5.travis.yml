@@ -1,3 +1,14 @@
+#
+# .travis.yml for Lab 5, for WebLAMP 442.
+#
+# This travis file installs composer in assignment1_part2,
+# updates it, and then runs the tests for that project.
+#
+# Important details:
+#   - Composer's installer can take an --install-dir parameter.
+#   - Install/update for composer can have a work directory, -d.
+#
+
 language:
   php
 

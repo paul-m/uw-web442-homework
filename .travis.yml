@@ -11,5 +11,5 @@ before_script:
   - php ./composer.phar -v -o update
 
 script:
-  - php vendor/bin/phpunit --coverage-text -c Tests/Conf/phpunit.xml
+  - php assigment1_part2/vendor/bin/phpunit --coverage-text -c assigment1_part2/Tests/Conf/phpunit.xml
 

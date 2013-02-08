@@ -9,5 +9,5 @@ before_script:
 # run the phpunit tests
 script:
   - cd ./assignment1_part2
-  - php ./vendor/bin/phpunit --coverage-text -c phpunit.xml
+  - php ./vendor/bin/phpunit --coverage-text -c Test/conf/phpunit.xml
 

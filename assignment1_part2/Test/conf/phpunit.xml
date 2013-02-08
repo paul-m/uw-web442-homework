@@ -4,12 +4,12 @@
     >
     <testsuites>
         <testsuite name="Assignment1Part2 Test Suite">
-            <directory>Test</directory>
+            <directory>../Test</directory>
         </testsuite>
     </testsuites>
     <filter>
       <whitelist>
-        <directory>Src</directory>
+        <directory>../../Src</directory>
       </whitelist>
     </filter>
 </phpunit>

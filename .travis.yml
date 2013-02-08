@@ -10,5 +10,6 @@ before_script:
   - php ./assignment1_part2/composer.phar -v -o -d=assignment1_part2/ update
 
 script:
-  - php ./assignment1_part2/vendor/bin/phpunit --coverage-text -c assignment1_part2/Test/conf/phpunit.xml
+  - cd ./assignment1_part2
+  - php ./vendor/bin/phpunit --coverage-text -c ./Test/conf/phpunit.xml
 

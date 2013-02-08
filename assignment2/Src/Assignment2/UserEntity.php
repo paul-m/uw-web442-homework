@@ -3,12 +3,22 @@ namespace Assignment2;
 
 /**
  * @file
- * Connect class to abstract some PDO.
+ * User entity class.
  */
 
 class UserEntity {
+
+  protected $_pdoAdaptor;
+
   protected $firstname;
   protected $lastname;
+
+  public function __construct($pdoAdaptor = NULL) {
+    if (!$pdoAdaptor) {
+      $pdoAdaptor = new MockPDOAdaptor();
+    }
+    $this->_pdoAdaptor = $pdoAdaptor;
+  }
 
   public function getFirstname() {
     return $this->firstname;

@@ -6,6 +6,9 @@ namespace Assignment2;
  * Testing our UserEntity class.
  */
 
+define('Assignment2\FIRSTNAME_MAX_LENGTH', 255);
+define('Assignment2\LASTNAME_MAX_LENGTH', 255);
+
 class UserTest
   extends Assignment2TestCase {
 
@@ -27,11 +30,25 @@ class UserTest
     // arbitrarily 10 names.
     for ($i=0; $i<10; $i++) {
       $data[] = array(
-        $this->randomName('f_', 255),
-        $this->randomName('l_', 255),
+        $this->randomName('f_', FIRSTNAME_MAX_LENGTH),
+        $this->randomName('l_', LASTNAME_MAX_LENGTH),
       );
     }
     $data[] = array('first', 'last');
+    return $data;
+  }
+
+  /**
+   * illegalNamesDataProvider()
+   * Provide edge case string names.
+   */
+  public function illegalNamesDataProvider() {
+    $data = array();
+    $data[] = array(
+      $this->randomName('f_', FIRSTNAME_MAX_LENGTH + 1),
+      $this->randomName('l_', LASTNAME_MAX_LENGTH + 1),
+    );
+    $data[] = array('', '');
     return $data;
   }
 
@@ -48,5 +65,21 @@ class UserTest
     $user->setLastname($lastn);
     $this->assertTrue($user->getLastname() == $lastn);
   }
+
+  /**
+   * testUserGoodGettersSetters()
+   * Test that all our getters and setters complain about bad data.
+   * @TODO: Set this to fail when the code happens.
+   *
+   * @dataProvider illegalNamesDataProvider
+   */
+  public function testUserBadGettersSetters($firstn, $lastn) {
+    $user = new UserEntity();
+    $user->setFirstname($firstn);
+    $this->assertTrue($user->getFirstname() == $firstn);
+    $user->setLastname($lastn);
+    $this->assertTrue($user->getLastname() == $lastn);
+  }
+
 }
 

@@ -7,11 +7,11 @@ php:
 
 # set up composer
 before_script:
-  - curl -s https://getcomposer.org/installer | php -- --install-dir="assignment1_part2"
-  - php ./assignment1_part2/composer.phar -v -o -d=assignment1_part2/ update
+  - curl -s https://getcomposer.org/installer | php -- --install-dir="assignment2"
+  - php ./assignment2/composer.phar -v -o -d=assignment2/ update
 
 # run the phpunit tests
 script:
-  - cd ./assignment1_part2
+  - cd ./assignment2
   - php ./vendor/bin/phpunit --coverage-text -c phpunit.xml
 

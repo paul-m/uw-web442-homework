@@ -1,16 +1,15 @@
-<phpunit bootstrap="../test_bootstrap.php"
+<phpunit bootstrap="Test/test_bootstrap.php"
          colors="true"
          verbose="true"
     >
     <testsuites>
         <testsuite name="Assignment2 Test Suite">
-            <directory>../*</directory>
+            <directory>Test</directory>
         </testsuite>
     </testsuites>
     <filter>
       <whitelist>
-        <directory>../../Src</directory>
+        <directory>Src</directory>
       </whitelist>
     </filter>
 </phpunit>
-

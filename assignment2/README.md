@@ -26,3 +26,5 @@ Run the tests with coverage reporting: `php vendor/bin/phpunit -c Test/conf/phpu
 
 You can then open ./coverage/index.html in a web browser to see a nifty report. It should be 100% coverage.
 
+This is another line so travis will do something.
+

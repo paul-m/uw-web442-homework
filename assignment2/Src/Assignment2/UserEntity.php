@@ -14,10 +14,7 @@ class UserEntity {
   protected $lastname;
 
   public function __construct($pdoAdaptor = NULL) {
-    if (!$pdoAdaptor) {
-      $pdoAdaptor = new MockPDOAdaptor();
-    }
-    $this->_pdoAdaptor = $pdoAdaptor;
+    $this->_pdoAdaptor = PDOAdaptorFactory::createPDOAdaptor();
   }
 
   public function getFirstname() {
@@ -26,6 +23,9 @@ class UserEntity {
   public function getLastname() {
     return $this->lastname;
   }
+  public function getID() {
+    return $this->id;
+  }
   
   public function setFirstname($fname) {
     $this->firstname = $fname;
@@ -33,5 +33,9 @@ class UserEntity {
   public function setLastname($lname) {
     $this->lastname = $lname;
   }
+  public function setID($id) {
+    $this->id = $id;
+  }
+
 }
 

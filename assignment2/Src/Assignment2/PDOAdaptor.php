@@ -7,6 +7,5 @@ namespace Assignment2;
  */
 
 class PDOAdaptor { //implements PDOAdaptorInterface {
-  
 }
 

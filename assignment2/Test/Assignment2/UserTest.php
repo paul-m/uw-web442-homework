@@ -80,6 +80,11 @@ class UserTest
     $user->setLastname($lastn);
     $this->assertTrue($user->getLastname() == $lastn);
   }
+  
+  /**
+   * testUserEntityQuery()
+   *
+   * 
 
 }
 

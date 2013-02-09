@@ -30,20 +30,23 @@ class MockPDOAdaptor implements PDOAdaptorInterface {
   }
 
   public function select($table = '', $column = '', $value = '') {
-    return FALSE;
+    $result = array()
+    if ('User' == $table) {
+      if ('id' == $column) {
+        switch ((integer)$value) {
+          case 1:
+            $result[] = array('id' => 1, 'firstname' => 'Paul', 'lastname' => 'Mitchum',);
+          case 2:
+            $result[] = array('id' => 2, 'firstname' => 'Jay', 'lastname' => 'Zeng',);
+        }
+      }
+    }
+    return $result;
   }
 
-  public function update() {
-    return FALSE;
-  }
-
-  public function delete() {
-    return FALSE;
-  }
-
-  public function insert() {
-    return FALSE;
-  }
+  public function insert($table, $record) { return TRUE; }
+  public function update($table, $record) { return TRUE; }
+  public function delete($table, $idArray) { return TRUE; }
   
 }
 

@@ -7,15 +7,13 @@ namespace Assignment2;
  */
 
 interface PDOAdaptorInterface {
-  public function __construct($databaseConfigArray);
+  public function database($databaseConfigArray);
   public function connect();
   public function disconnect();
   public function select($table = '', $column = '', $value = '');
   public function insert($table, $record);
   public function update($table, $record);
-  public function delete($table, $idArray);
-
-// DELETE FROM `shop_categories` WHERE FIND_IN_SET(id, :id)"
+  public function delete($table, $id);
 
 }
 

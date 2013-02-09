@@ -6,16 +6,10 @@ namespace Assignment2;
  * User entity class.
  */
 
-class UserEntity {
-
-  protected $_pdoAdaptor;
+class UserEntity implements PDOSchemaInterface {
 
   protected $firstname;
   protected $lastname;
-
-  public function __construct($pdoAdaptor = NULL) {
-    $this->_pdoAdaptor = PDOAdaptorFactory::createPDOAdaptor();
-  }
 
   public function getFirstname() {
     return $this->firstname;
@@ -35,6 +29,24 @@ class UserEntity {
   }
   public function setID($id) {
     $this->id = $id;
+  }
+
+  public function PDOAdaptorSchema() {
+    return array(
+      ['User'] => array(
+        ['id'] => array(
+          ['type'] => \PDO::PARAM_INT,
+        ),
+        ['firstname'] => array(
+          ['type'] => \PDO::PARAM_STR,
+          ['size'] => 255,
+        ),
+        ['lastname'] => array(
+          ['type'] => \PDO::PARAM_STR,
+          ['size'] => 255,
+        ),
+      ),
+    );
   }
 
 }

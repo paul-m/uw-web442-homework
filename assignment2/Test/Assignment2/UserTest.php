@@ -62,9 +62,9 @@ class UserTest
     $user = new UserEntity();
     $user->firstname = $firstn;
     $this->assertTrue($user->firstname == $firstn);
-/*    $user->lastname = $lastn;
+    $user->lastname = $lastn;
     $this->assertTrue($user->lastname == $lastn);
-  */}
+  }
 
   /**
    * testUserGoodGettersSetters()
@@ -72,13 +72,14 @@ class UserTest
    * @TODO: Set this to fail when the code happens.
    *
    * @dataProvider illegalNamesDataProvider
+   * @expectedException RuntimeException
    */
 /*  public function testUserBadGettersSetters($firstn, $lastn) {
     $user = new UserEntity();
-    $user->setFirstname($firstn);
-    $this->assertTrue($user->getFirstname() == $firstn);
-    $user->setLastname($lastn);
-    $this->assertTrue($user->getLastname() == $lastn);
+    $user->firstname = $firstn;
+    $this->assertTrue($user->firstname == $firstn);
+    $user->lastname = $lastn;
+    $this->assertTrue($user->lastname == $lastn);
   }*/
   
   /**

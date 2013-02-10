@@ -20,7 +20,9 @@ class UserEntity implements PDOSchemaInterface {
 
   public function __get($name) {
     $table = $this->getPDOAdaptorSchema();
-    $schema = $table[reset(array_keys($table))];
+    $keyz = array_keys($table);
+    $tableName = reset($keyz);
+    $schema = $table[$tableName];
     if (isset($schema[$name])) {
       if (isset($this->_data[$name])) {
         return $this->_data[$name];
@@ -36,28 +38,35 @@ class UserEntity implements PDOSchemaInterface {
   }
 
   public function __set($name, $value) {
+//  echo '--> ' . $name . ' = ' . $value;
     $table = $this->getPDOAdaptorSchema();
-    $schema = $table[reset(array_keys($table))];
+//    echo '  ';
+    $keyz = array_keys($table);
+    $tableName = reset($keyz);
+//    echo $tabley;
+    $schema = $table[$tableName];
+//    var_dump($schema);
     if (isset($schema[$name])) {
       // @TODO: check for type.
       $this->_data[$name] = $value;
+      return;
     }
     throw new \RuntimeException('Unknown key.');
   }
 
   public function getPDOAdaptorSchema() {
     return array(
-      ['User'] => array(
-        ['id'] => array(
-          ['type'] => \PDO::PARAM_INT,
+      'User' => array(
+        'id' => array(
+          'type' => \PDO::PARAM_INT,
         ),
-        ['firstname'] => array(
-          ['type'] => \PDO::PARAM_STR,
-          ['size'] => 255,
+        'firstname' => array(
+          'type' => \PDO::PARAM_STR,
+          'size' => 255,
         ),
-        ['lastname'] => array(
-          ['type'] => \PDO::PARAM_STR,
-          ['size'] => 255,
+        'lastname' => array(
+          'type' => \PDO::PARAM_STR,
+          'size' => 255,
         ),
       ),
     );

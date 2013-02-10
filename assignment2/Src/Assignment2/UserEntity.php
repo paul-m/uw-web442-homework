@@ -38,14 +38,10 @@ class UserEntity implements PDOSchemaInterface {
   }
 
   public function __set($name, $value) {
-//  echo '--> ' . $name . ' = ' . $value;
     $table = $this->getPDOAdaptorSchema();
-//    echo '  ';
     $keyz = array_keys($table);
     $tableName = reset($keyz);
-//    echo $tabley;
     $schema = $table[$tableName];
-//    var_dump($schema);
     if (isset($schema[$name])) {
       // @TODO: check for type.
       $this->_data[$name] = $value;

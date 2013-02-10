@@ -1,4 +1,5 @@
 <?php
+namespace Assignment2;
 
 /**
  * @file
@@ -24,5 +25,5 @@ interface PDOSchemaInterface {
    * )
    *
    */
-  public function pdoAdaptorSchema();
+  public function getPDOAdaptorSchema();
 }

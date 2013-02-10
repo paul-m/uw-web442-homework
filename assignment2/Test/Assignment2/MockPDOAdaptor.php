@@ -8,6 +8,8 @@ namespace Assignment2;
 
 class MockPDOAdaptor implements PDOAdaptorInterface {
 
+  protected $_entity;
+
   /**
    * database function.
    *
@@ -17,8 +19,12 @@ class MockPDOAdaptor implements PDOAdaptorInterface {
    * @param array $databaseConfigArray (default: array())
    * @return void
    */
-  public function database($databaseConfigArray = array()) {
+  public function setDatabase($databaseConfigArray = array()) {
     return;
+  }
+  
+  public function setEntity($pdoSchemaEntity = NULL) {
+    $this->_entity = $pdoSchemaEntity;
   }
 
   public function connect() {
@@ -29,7 +35,7 @@ class MockPDOAdaptor implements PDOAdaptorInterface {
     return TRUE;
   }
 
-  public function select($table = '', $column = '', $value = '') {
+  public function select($column = '', $value = '') {
     $result = array()
     if ('User' == $table) {
       if ('id' == $column) {

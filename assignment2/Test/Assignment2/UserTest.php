@@ -60,11 +60,11 @@ class UserTest
    */
   public function testUserGoodGettersSetters($firstn, $lastn) {
     $user = new UserEntity();
-    $user->setFirstname($firstn);
-    $this->assertTrue($user->getFirstname() == $firstn);
-    $user->setLastname($lastn);
-    $this->assertTrue($user->getLastname() == $lastn);
-  }
+    $user->firstname = $firstn;
+    $this->assertTrue($user->firstname == $firstn);
+/*    $user->lastname = $lastn;
+    $this->assertTrue($user->lastname == $lastn);
+  */}
 
   /**
    * testUserGoodGettersSetters()
@@ -73,13 +73,13 @@ class UserTest
    *
    * @dataProvider illegalNamesDataProvider
    */
-  public function testUserBadGettersSetters($firstn, $lastn) {
+/*  public function testUserBadGettersSetters($firstn, $lastn) {
     $user = new UserEntity();
     $user->setFirstname($firstn);
     $this->assertTrue($user->getFirstname() == $firstn);
     $user->setLastname($lastn);
     $this->assertTrue($user->getLastname() == $lastn);
-  }
+  }*/
   
   /**
    * testUserEntityQuery()

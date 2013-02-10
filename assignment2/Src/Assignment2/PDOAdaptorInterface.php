@@ -7,13 +7,21 @@ namespace Assignment2;
  */
 
 interface PDOAdaptorInterface {
-  public function database($databaseConfigArray);
+  public function setDatabase($databaseConfigArray);
+
+  public function setEntity($pdoSchemaEntity);
+
   public function connect();
+
   public function disconnect();
-  public function select($table = '', $column = '', $value = '');
-  public function insert($table, $record);
-  public function update($table, $record);
-  public function delete($table, $id);
+
+  public function select($column, $value);
+
+  public function insert($record);
+
+  public function update($record);
+
+  public function delete($id);
 
 }
 

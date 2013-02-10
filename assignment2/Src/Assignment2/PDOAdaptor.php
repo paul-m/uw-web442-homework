@@ -6,17 +6,13 @@ namespace Assignment2;
  * A PDO adaptor class.
  */
 
-class PDOAdaptor implements PDOAdaptorInterface {
+class PDOAdaptor extends PDOEntityAdaptor implements PDOAdaptorInterface {
+
   protected $_databaseConfig;
   protected $_pdo;
-  protected $_entity; // is a PDOSchemaInterface object.
   
   public function setDatabase($databaseConfigArray) {
     $this->databaseConfig = $databaseConfigArray;
-  }
-
-  public function setEntity($pdoSchemaEntity) {
-    $this->_entity = $pdoSchemaEntity;
   }
 
   public function connect() {
@@ -27,19 +23,11 @@ class PDOAdaptor implements PDOAdaptorInterface {
     $this->_pdo = NULL;
   }
 
-  public function select($table = '', $column = '', $value = '') {
-    if (!$this->_entity) {
-      throw new \RuntimeException('No entity set for PDO adaptor.');
-    }
-    $schema = $this->_entity->pdoAdaptorSchema();
-    if (!$schema ||
-      !isset($schema[$table]) ||
-      !isset($schema[$table][$column])) {
-      throw new \RuntimeException('No schema model available to PDO adaptor.');
-    }
+  public function select($column = '', $value = '') {
+    $schema = $this->getEntityTable();
     if ($this->_pdo) {
       $sql = 'SELECT * FROM :table WHERE :column = ';
-      if ($schema[$table][$column]['type'] == \PDO::PARAM_STR) {
+      if ($schema[$column]['type'] == \PDO::PARAM_STR) {
         $sql .= "':value'";
       }
       else {
@@ -58,16 +46,19 @@ class PDOAdaptor implements PDOAdaptorInterface {
     return array();
   }
 
-  public function insert($table, $record) {
+  public function insert($record) {
     $this->update($table, $record);
   }
 
-  public function update($table, $record) {
-    
+  public function update($record) {
+    $schema = $this->getEntityTable();
+    // do some sql here.
   }
 
-
-  public function delete($table, $id) {}
+  public function delete($id) {
+    $schema = $this->getEntityTable();
+    // do some sql here.
+  }
 
 }
 

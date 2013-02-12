@@ -6,12 +6,13 @@ namespace Assignment2;
  * A PDO adaptor class.
  */
 
-class PDOAdaptor extends PDOEntityAdaptor implements PDOAdaptorInterface {
+class PDOAdaptor implements PDOAdaptorInterface {
 
   protected $_databaseConfig;
   protected $_pdo;
+  protected $_entity; // is a PDOSchemaInterface object.
   
-  public function setDatabase($databaseConfigArray) {
+  public function setDatabase(array $databaseConfigArray) {
     $this->databaseConfig = $databaseConfigArray;
   }
 
@@ -46,26 +47,26 @@ class PDOAdaptor extends PDOEntityAdaptor implements PDOAdaptorInterface {
   public function disconnect() {
     $this->_pdo = NULL;
   }
-
+  
   public function select($column = '', $value = '') {
-    $schema = $this->getEntityTable();
-    if ($this->_pdo) {
-      $sql = 'SELECT * FROM :table WHERE :column = ';
-      if ($schema[$column]['type'] == \PDO::PARAM_STR) {
-        $sql .= "':value'";
-      }
-      else {
-        $sql .= ':value';
-      }
+    $table = $this->getEntityTable();
+    $tableName = $this->getEntityTableName();
+    $sql = 'SELECT * FROM :table WHERE :column = ';
+    if ($schema[$column]['type'] == \PDO::PARAM_STR) {
+      $sql .= "':value'";
+    }
+    else {
+      $sql .= ':value';
+    }
+    try {
       $statement = $this->_pdo->prepare($sql);
-      $statement->execute(
-        array(
-          ':table' => $table,
-          ':column' => $column,
-          ':value' => $value,
-        )
-      );
+      $statement->bindParam(':table', $tableName, PDO::PARAM_STR);
+      $statement->bindParam(':column', $column, PDO::PARAM_STR);
+      $statement->bindParam(':value', $value, $table[$column]['type']);
+      $statement->exec();
       return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    } catch (\Exception $e) {
+      throw new \RuntimeException('Attempting to SELECT without PDO object.');
     }
     return array();
   }
@@ -84,11 +85,52 @@ class PDOAdaptor extends PDOEntityAdaptor implements PDOAdaptorInterface {
   }
 
   public function delete($id) {
-    $schema = $this->getEntityTable();
-    // do some sql here.
+    $result = NULL;
+    $table = $this->getEntityTable();
+    $tableName = $this->getEntityTableName();
+    $sql = 'DELETE FROM :table WHERE id=:id';
+    try {
+      $statement = $this->_pdo->prepare($sql);
+      $statement->bindParam(':table', $tableName, PDO::PARAM_STR);
+      $statement->bindParam(':id', $value, $table['id']['type']);
+      $result = $statement->exec();
+    } catch (\Exception $e) {
+      throw new \RuntimeException('Unable to delete.');
+    }
+    return $result;
   }
 
-//  protected function validate(
+  public function setEntity(PDOSchemaInterface $pdoSchemaEntity) {
+    $this->_entity = $pdoSchemaEntity;
+  }
+
+  public function getEntitySchema() {
+    if (!$this->_entity) {
+      throw new \RuntimeException('No entity set for PDO Adaptor.');
+    }
+    try {
+    $schema = $this->_entity->getPDOAdaptorSchema();
+    } catch (Exception $e) {
+      throw new \RuntimeException('PDO Adaptor entity does not support schema.');
+    }
+    return $schema;
+  }
+
+  public function getEntityTableName() {
+    $schema = $this->getEntitySchema();
+    $keyz = array_keys($schema);
+    $table = reset($keyz);
+    if (empty($table)) {
+      throw new \RuntimeException('PDO Adaptor schema has no tables set.');
+    }
+    return $table;
+  }
+
+  public function getEntityTable() {
+    $tableName = $this->getEntityTableName();
+    $schema = $this->getEntitySchema();
+    return $schema[$tableName];
+  }
 
 }
 

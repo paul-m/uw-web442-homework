@@ -7,9 +7,9 @@ namespace Assignment2;
  */
 
 interface PDOAdaptorInterface {
-  public function setDatabase($databaseConfigArray);
+  public function setDatabase(array $databaseConfigArray);
 
-  public function setEntity($pdoSchemaEntity);
+  public function setEntity(PDOSchemaInterface $pdoSchemaEntity);
 
   public function connect();
 

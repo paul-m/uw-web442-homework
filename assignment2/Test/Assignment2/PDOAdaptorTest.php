@@ -15,10 +15,10 @@ class PDOAdaptorTest
   
   public function malformedSchema() {
     $emptyArray = array();
-    $data = [
+    $data = array(
       $emptyArray,
 //      array('tablename' => array()),
-    ];
+    );
     return $data;
   }
 

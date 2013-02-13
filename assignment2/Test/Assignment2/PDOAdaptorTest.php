@@ -14,10 +14,11 @@ class PDOAdaptorTest
   }
   
   public function malformedSchema() {
+  return array(array(array()));
     $emptyArray = array();
     $data = array(
       $emptyArray,
-//      array('tablename' => array()),
+      array('tablename' => array()),
     );
     return $data;
   }
@@ -28,7 +29,7 @@ class PDOAdaptorTest
    *
    * @dataProvider malformedSchema
    */
-  public function t___estMalformedSchema($malformedSchema) {
+  public function testMalformedSchema(array $malformedSchema) {
     $entity = new MockPDOSchema($malformedSchema);
     $adaptor = new PDOAdaptor();
     $adaptor->setEntity($entity);

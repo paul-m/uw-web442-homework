@@ -14,18 +14,17 @@ class PDOAdaptorTest
   }
   
   public function malformedSchema() {
-  return array(array(array()));
-    $emptyArray = array();
     $data = array(
-      $emptyArray,
-      array('tablename' => array()),
+      array(
+        array(),
+        array('tablename' => array()),
+      ),
     );
     return $data;
   }
 
   /**
    * testMalformedSchema()
-   * @TODO: Come back to this.
    *
    * @dataProvider malformedSchema
    */
@@ -40,6 +39,33 @@ class PDOAdaptorTest
       return;
     }
     $this->assertFalse(TRUE);
+  }
+
+  public function badDbConnection() {
+    $data = array(
+      array(
+        array(
+          'host' => 'very',
+          'dbname' => 'very',
+          'user' => 'wrong',
+          'password' => 'wrong',
+          'port' => '666',
+        ),
+        // empty array
+        array(),
+      ),
+    );
+    return $data;
+  }
+
+  /**
+   * @dataProvider badDbConnection
+   * @expectedException \RuntimeException
+   */
+  public function testBadConnect($db) {
+    $pdoa = new PDOAdaptor();
+    $pdoa->setDatabase($db);
+    $pdoa->connect();
   }
 
 }

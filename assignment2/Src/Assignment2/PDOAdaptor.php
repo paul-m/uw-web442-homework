@@ -13,7 +13,21 @@ class PDOAdaptor implements PDOAdaptorInterface {
   protected $_entity; // is a PDOSchemaInterface object.
   
   public function setDatabase(array $databaseConfigArray) {
-    $this->databaseConfig = $databaseConfigArray;
+    $this->_databaseConfig = $databaseConfigArray;
+  }
+
+  protected function _pdoConnectionString() {
+    $cred = $this->_databaseConfig;
+    $driver = 'mysql';
+    $host = 'localhost';
+    $dbname = 'test';
+    if (isset($cred['driver'])) $driver = $cred['driver'];
+    if (isset($cred['host'])) $host = $cred['host'];
+    if (isset($cred['dbname'])) $dbname = $cred['dbname'];
+    $pdoConnectionString = $driver .
+      ':host=' . $host .
+      ';dbname=' . $dbname;
+    return $pdoConnectionString;
   }
 
   public function connect() {
@@ -21,26 +35,18 @@ class PDOAdaptor implements PDOAdaptorInterface {
     $cred = $this->_databaseConfig;
     if (!is_array($cred)) throw new \RuntimeException('No DB credentials.');
     // Some defaults.
-    $driver = 'mysql';
-    $host = 'localhost';
-    $dbname = 'test';
     $username = '';
     $password = '';
     // Glean from the db config array.
-    if (isset($cred['driver'])) $driver = $cred['driver'];
-    if (isset($cred['host'])) $host = $cred['host'];
-    if (isset($cred['dbname'])) $dbname = $cred['dbname'];
     if (isset($cred['username'])) $username = $cred['username'];
     if (isset($cred['password'])) $password = $cred['password'];
     // New PDO object.
     $pdo = new \PDO(
-      $driver .
-      ':host=' . $host .
-      ';dbname=' . $dbname,
+      $this->_pdoConnectionString(),
       $username,
       $password
     );
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     $this->_pdo = $pdo;
   }
 
@@ -71,17 +77,42 @@ class PDOAdaptor implements PDOAdaptorInterface {
     return array();
   }
 
-  public function loadByIds($idArray = array()) {
-    
-  }
-
   public function insert($record) {
-    $this->update($table, $record);
+    $this->update($record, TRUE);
   }
 
-  public function update($record) {
-    $schema = $this->getEntityTable();
-    // do some sql here.
+  public function update($record, $insert = FALSE) {
+    $result = NULL;
+    $table = $this->getEntityTable();
+    $tableName = $this->getEntityTableName();
+    $sql = 'INSERT INTO :table SET ';
+    
+    $queryArray = array();
+    // make sure there's no id column on insert.
+    unset($record['id']);
+    // assemble basic ['columnname'] => value array
+    foreach($table as $columnName) {
+      if (isset($record[$columnName])) {
+        $queryArray[$columnName] = $record[$columnName];
+      }
+    }
+    $sqlArray = array();
+    // structure the query
+    foreach($queryArray as $columnName => $value) {
+      $sqlArray .= ':c_' . $columnName . ' = :v_' . $columnName;
+    }
+    // Generate some SQL
+    $sql .= implode(', ', $sqlArray);
+    // Generate statement object.
+    $statement = $this->_pdo->prepare($sql);
+    // Bind values.
+    $statement->bindValue(':table', $tableName);
+    foreach($queryArray as $columnName => $value) {
+      $statement->bindValue(':c_' . $columnName, $columnName);
+      $statement->bindValue(':v_' . $columnName, $value);
+    }
+    // Do the query.
+    return $statement->exec();
   }
 
   public function delete($id) {

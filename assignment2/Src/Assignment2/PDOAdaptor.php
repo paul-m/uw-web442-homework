@@ -30,22 +30,24 @@ class PDOAdaptor implements PDOAdaptorInterface {
     return $pdoConnectionString;
   }
 
-  public function connect() {
-    // Grab the config.
-    $cred = $this->_databaseConfig;
-    if (!is_array($cred)) throw new \RuntimeException('No DB credentials.');
-    // Some defaults.
-    $username = '';
-    $password = '';
-    // Glean from the db config array.
-    if (isset($cred['username'])) $username = $cred['username'];
-    if (isset($cred['password'])) $password = $cred['password'];
-    // New PDO object.
-    $pdo = new \PDO(
-      $this->_pdoConnectionString(),
-      $username,
-      $password
-    );
+  public function connect(\PDO $pdo = NULL) {
+    if (!$pdo) {
+      // Grab the config.
+      $cred = $this->_databaseConfig;
+      if (!is_array($cred)) throw new \RuntimeException('No DB credentials.');
+      // Some defaults.
+      $username = '';
+      $password = '';
+      // Glean from the db config array.
+      if (isset($cred['username'])) $username = $cred['username'];
+      if (isset($cred['password'])) $password = $cred['password'];
+      // New PDO object.
+      $pdo = new \PDO(
+        $this->_pdoConnectionString(),
+        $username,
+        $password
+      );
+    }
     $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     $this->_pdo = $pdo;
   }
@@ -57,24 +59,19 @@ class PDOAdaptor implements PDOAdaptorInterface {
   public function select($column = '', $value = '') {
     $table = $this->getEntityTable();
     $tableName = $this->getEntityTableName();
-    $sql = 'SELECT * FROM :table WHERE :column = ';
-    if ($schema[$column]['type'] == \PDO::PARAM_STR) {
-      $sql .= "':value'";
-    }
-    else {
-      $sql .= ':value';
-    }
-    try {
+    $sql = 'SELECT * FROM :table WHERE :column = :value';
+//    try {
       $statement = $this->_pdo->prepare($sql);
-      $statement->bindParam(':table', $tableName, PDO::PARAM_STR);
-      $statement->bindParam(':column', $column, PDO::PARAM_STR);
-      $statement->bindParam(':value', $value, $table[$column]['type']);
-      $statement->exec();
+      $statement->bindValue(':table', $tableName, \PDO::PARAM_STR);
+      $statement->bindValue(':column', $column, \PDO::PARAM_STR);
+      $statement->bindValue(':value', $value, $table[$column]['type']);
+//      $statement->debugDumpParams();
+      $statement->execute();
       return $statement->fetchAll(\PDO::FETCH_ASSOC);
-    } catch (\Exception $e) {
+/*    } catch (\Exception $e) {
       throw new \RuntimeException('Attempting to SELECT without PDO object.');
     }
-    return array();
+*/    return array();
   }
 
   public function insert($record) {
@@ -85,11 +82,19 @@ class PDOAdaptor implements PDOAdaptorInterface {
     $result = NULL;
     $table = $this->getEntityTable();
     $tableName = $this->getEntityTableName();
-    $sql = 'INSERT INTO :table SET ';
+    $sql = '';
+    // INSERT special cases
+    if ($insert) {
+      // Unset the ID column
+      unset($record['id']);
+      $sql .= 'INSERT INTO ';
+    }
+    else {
+      $sql .= 'UPDATE  ';
+    }
+    $sql = ':table SET ';
     
     $queryArray = array();
-    // make sure there's no id column on insert.
-    unset($record['id']);
     // assemble basic ['columnname'] => value array
     foreach($table as $columnName) {
       if (isset($record[$columnName])) {

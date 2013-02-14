@@ -6,7 +6,7 @@ namespace Assignment2;
  * User entity class.
  */
 
-class EntityTest implements PDOSchemaInterface {
+class TestEntity implements PDOSchemaInterface {
 
   public function getPDOAdaptorSchema() {
     return array(

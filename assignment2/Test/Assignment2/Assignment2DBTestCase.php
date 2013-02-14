@@ -17,15 +17,20 @@ abstract class Assignment2DBTestCase extends \PHPUnit_Extensions_Database_TestCa
   final public function getConnection() {
     if ($this->conn === null) {
       if (self::$pdo == null) {
-        $dsn = $GLOBALS['DB_DRIVER'] . ':' .
-          'dbname=' . $GLOBALS['DB_DBNAME'] . ';' .
-          'host=' . $GLOBALS['DB_HOST'];
-        self::$pdo = new \PDO( $dsn, $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'] );
+        self::$pdo = new \PDO('sqlite::memory:');
       }
-      $this->conn = $this->createDefaultDBConnection(self::$pdo, $GLOBALS['DB_DBNAME']);
+      $this->conn = $this->createDefaultDBConnection(self::$pdo, ':memory:');
     }
-    
     return $this->conn;
   }
+
+  public function setUp() {
+    $tableNames = array('User');
+    $conn = $this->conn;
+    if($conn) {
+      $dataSet = $conn->getConnection()->createDataSet($tableNames);
+    }
+  }
+
 }
 

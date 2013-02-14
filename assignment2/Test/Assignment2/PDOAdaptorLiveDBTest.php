@@ -8,7 +8,31 @@ namespace Assignment2;
 class PDOAdaptorLiveDBTest
   extends Assignment2DBTestCase {
 
+    /**
+     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
+     */
+  public function getDataSet() {
+    return $this->createXMLDataSet(dirname(__FILE__).'/fixtures/User-db.xml');
+  }
+  
+  /**
+   * @expectedException \Exception
+   */
+  public function testBadConnection() {
+    $pdoa = new PDOAdaptor();
+    $pdoa->connect();
+  }
+  
+  public function t__estGoodConnection() {
+    $pdoa = new PDOAdaptor();
+    $pdoa->setEntity(new TestEntity());
+    $pdo = $this->getConnection()->getConnection();
+    $pdoa->connect($pdo);
+    $this->assertTrue(TRUE);    
+  }
+
   public function dbConnection() {
+  echo 'dbconnection';
     $data = array(
       array(
         array(
@@ -24,32 +48,21 @@ class PDOAdaptorLiveDBTest
     return $data;
   }
 
-    /**
-     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
-     */
-  public function getDataSet() {
-    return $this->createXMLDataSet(dirname(__FILE__).'/fixtures/User-db.xml');
-  }
-  
   /**
-   * @expectedException \RuntimeException
+   * @dataProvider dbConnection
    */
-  public function testBadConnection() {
+  public function te__stGoodArrayConnection($db) {
     $pdoa = new PDOAdaptor();
+    $pdoa->setDatabase($db);
+    $pdoa->setEntity(new TestEntity());
+//    $pdo = $this->getConnection()->getConnection();
     $pdoa->connect();
-  }
-  
-  public function testGoodConnection() {
-    $pdoa = new PDOAdaptor();
-    $pdoa->setEntity(new EntityTest());
-    $pdo = $this->getConnection()->getConnection();
-    $pdoa->connect($pdo);
     $this->assertTrue(TRUE);    
   }
   
   public function t__estSelect() {
     $pdoa = new PDOAdaptor();
-    $pdoa->setEntity(new EntityTest());
+    $pdoa->setEntity(new TestEntity());
     $pdo = $this->getConnection()->getConnection();
     $pdoa->connect($pdo);
     $pdoa->select('id', 1);

@@ -18,21 +18,27 @@ class PDOAdaptor implements PDOAdaptorInterface {
 
   protected function _pdoConnectionString() {
     $cred = $this->_databaseConfig;
-    $driver = 'mysql';
-    $host = 'localhost';
-    $dbname = 'test';
-    if (isset($cred['driver'])) $driver = $cred['driver'];
+    $driver = '';
+    $host = '';
+    $dbname = '';
+    if (isset($cred['driver'])) { echo 'setting driver'; $driver = $cred['driver']; }
     if (isset($cred['host'])) $host = $cred['host'];
     if (isset($cred['dbname'])) $dbname = $cred['dbname'];
+    if ('' == $driver) throw new \RuntimeException('no specified driver.');
+    if ('' == $host) throw new \RuntimeException('no specified host.');
+    if ('' == $dbname) throw new \RuntimeException('no specified database.');
     $pdoConnectionString = $driver .
       ':host=' . $host .
       ';dbname=' . $dbname;
     return $pdoConnectionString;
   }
 
-  public function connect(\PDO $pdo = NULL) {
-    if (!$pdo) {
+  public function connect() {//\PDO $pdo = NULL) {
+  $pdo = NULL;
+    if (empty($pdo)) {
       // Grab the config.
+      $connectionString = $this->_pdoConnectionString();
+      echo "\n$connectionString\n";
       $cred = $this->_databaseConfig;
       if (!is_array($cred)) throw new \RuntimeException('No DB credentials.');
       // Some defaults.
@@ -42,14 +48,20 @@ class PDOAdaptor implements PDOAdaptorInterface {
       if (isset($cred['username'])) $username = $cred['username'];
       if (isset($cred['password'])) $password = $cred['password'];
       // New PDO object.
-      $pdo = new \PDO(
-        $this->_pdoConnectionString(),
-        $username,
-        $password
-      );
+      try {
+        echo 'new pdo';
+        $pdo = new \PDO(
+          $connectionString,
+          $username,
+          $password
+        );
+        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+      } catch (\Exception $e) {
+        throw new \RuntimeException('unable to connect because bad PDO.');
+      }
     }
-    $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     $this->_pdo = $pdo;
+    if (!$this->_pdo) throw new \RuntimeException('Unable to connect.');
   }
 
   public function disconnect() {

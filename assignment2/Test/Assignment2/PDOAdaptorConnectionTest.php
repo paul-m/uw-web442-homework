@@ -28,22 +28,22 @@ class PDOAdaptorConnectionTest
     $pdoa->connect();
   }
   
-/*  public function testGoodPDOConnection() {
+  public function testGoodPDOConnection() {
     $pdoa = new PDOAdaptor();
     $pdoa->setEntity(new TestEntity());
     $pdo = $this->getConnection()->getConnection();
     $pdoa->connect($pdo);
     $this->assertTrue(TRUE);    
-  }*/
+  }
 
-/*  public function testDisconnect() {
+  public function testDisconnect() {
     $pdoa = new PDOAdaptor();
     $pdoa->setEntity(new TestEntity());
     $pdo = $this->getConnection()->getConnection();
     $pdoa->connect($pdo);
     $pdoa->disconnect();
     $this->assertTrue(TRUE);    
-  }*/
+  }
 
   public function dbConnection() {
     $data = array(
@@ -81,12 +81,17 @@ class PDOAdaptorConnectionTest
       'port' => 'port',
     );
     // _pdoConnectionString is protected function, so we
-    // make a mocky stub.
+    // use a mock.
     $mock = new MockPDOAdaptorDB();
     $mock->setDatabase($db);
-    //mysql:dbname=testdb;host=127.0.0.1
+    // first with the port...
+    $this->assertEquals($mock->getPDOConnectionStringForTest(),
+      'driver:host=host:port;dbname=dbname');
+    // remove the port.
+    unset($db['port']);
+    $mock->setDatabase($db);
     $this->assertEquals($mock->getPDOConnectionStringForTest(),
       'driver:host=host;dbname=dbname');
-  }
+    }
 }
 

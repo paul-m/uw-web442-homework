@@ -24,6 +24,11 @@ abstract class Assignment2DBTestCase extends \PHPUnit_Extensions_Database_TestCa
     return $this->conn;
   }
 
+  public function __destruct() {
+    $this->conn = NULL;
+    self::$pdo = NULL;
+  }
+
 /*  public function setUp() {
     $tableNames = array('User');
     $conn = $this->conn;

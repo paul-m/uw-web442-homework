@@ -18,12 +18,10 @@ class TestEntity extends PDOEntity implements PDOSchemaInterface {
         'firstname' => array(
           'type' => \PDO::PARAM_STR,
           'size' => 255,
-          'defaultValue' => 'test_firstname',
         ),
         'lastname' => array(
           'type' => \PDO::PARAM_STR,
           'size' => 255,
-          'defaultValue' => 'test_lastname',
         ),
       ),
     );

@@ -20,21 +20,23 @@ class PDOAdaptor implements PDOAdaptorInterface {
     $cred = $this->_databaseConfig;
     $driver = '';
     $host = '';
+    $port = '';
     $dbname = '';
     if (isset($cred['driver'])) $driver = $cred['driver'];
     if (isset($cred['host'])) $host = $cred['host'];
+    if (isset($cred['port'])) $port = $cred['port'];
     if (isset($cred['dbname'])) $dbname = $cred['dbname'];
     if ('' == $driver) throw new \RuntimeException('no specified driver.');
     if ('' == $host) throw new \RuntimeException('no specified host.');
     if ('' == $dbname) throw new \RuntimeException('no specified database.');
     $pdoConnectionString = $driver .
-      ':host=' . $host .
-      ';dbname=' . $dbname;
+      ':host=' . $host;
+    if ($port != '') $pdoConnectionString .= ':' . $port;
+    $pdoConnectionString .= ';dbname=' . $dbname;
     return $pdoConnectionString;
   }
 
-  public function connect() {//\PDO $pdo = NULL) {
-  $pdo = NULL;
+  public function connect(\PDO $pdo = NULL) {
     if (empty($pdo)) {
       // Grab the config.
       $connectionString = $this->_pdoConnectionString();
@@ -72,18 +74,17 @@ class PDOAdaptor implements PDOAdaptorInterface {
     $table = $this->getEntityTable();
     $tableName = $this->getEntityTableName();
     $sql = 'SELECT * FROM :table WHERE :column = :value';
-//    try {
+    try {
       $statement = $this->_pdo->prepare($sql);
       $statement->bindValue(':table', $tableName, \PDO::PARAM_STR);
       $statement->bindValue(':column', $column, \PDO::PARAM_STR);
       $statement->bindValue(':value', $value, $table[$column]['type']);
-//      $statement->debugDumpParams();
       $statement->execute();
       return $statement->fetchAll(\PDO::FETCH_ASSOC);
-/*    } catch (\Exception $e) {
+    } catch (\Exception $e) {
       throw new \RuntimeException('Attempting to SELECT without PDO object.');
     }
-*/    return array();
+    return array();
   }
 
   public function insert($record) {
@@ -156,11 +157,7 @@ class PDOAdaptor implements PDOAdaptorInterface {
     if (!$this->_entity) {
       throw new \RuntimeException('No entity set for PDO Adaptor.');
     }
-    try {
     $schema = $this->_entity->getPDOAdaptorSchema();
-    } catch (Exception $e) {
-      throw new \RuntimeException('PDO Adaptor entity does not support schema.');
-    }
     return $schema;
   }
 

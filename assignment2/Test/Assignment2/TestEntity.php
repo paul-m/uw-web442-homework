@@ -13,7 +13,6 @@ class TestEntity extends PDOEntity implements PDOSchemaInterface {
       'User' => array(
         'id' => array(
           'type' => \PDO::PARAM_INT,
-          'defaultValue' => NULL,
         ),
         'firstname' => array(
           'type' => \PDO::PARAM_STR,
@@ -25,6 +24,11 @@ class TestEntity extends PDOEntity implements PDOSchemaInterface {
         ),
       ),
     );
+  }
+
+  public function createTestTable(\PDO $pdo) {
+    $pdo->query('DROP TABLE IF EXISTS User');
+    $pdo->query('CREATE TABLE User (id INTEGER NOT NULL, firstname CHAR(255), lastname CHAR(255),PRIMARY KEY (id), UNIQUE (id))');
   }
 
 }

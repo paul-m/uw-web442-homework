@@ -12,12 +12,13 @@ class PDOAdaptorConnectionTest
      * @return PHPUnit_Extensions_Database_DataSet_IDataSet
      */
   public function getDataSet() {
-    return $this->createXMLDataSet(dirname(__FILE__).'/fixtures/User-db.xml');
+    return new \PHPUnit_Extensions_Database_DataSet_DefaultDataSet(array());
+//    return $this->createXMLDataSet(dirname(__FILE__).'/fixtures/User-db.xml');
   }
 
   public function setUp() {
     // Why is this enough????
-    $pdo = $this->getConnection();//->getConnection();
+    //$pdo = $this->getConnection();//->getConnection();
   }
   
   /**
@@ -73,7 +74,7 @@ class PDOAdaptorConnectionTest
     $this->assertTrue(TRUE);    
   }
   
-  public function testGoodConnectionString() {
+  public function testConnectionString() {
     $db = array(
       'driver' => 'driver',
       'dbname' => 'dbname',

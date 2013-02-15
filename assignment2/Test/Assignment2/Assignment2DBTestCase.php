@@ -23,19 +23,23 @@ abstract class Assignment2DBTestCase extends \PHPUnit_Extensions_Database_TestCa
     }
     return $this->conn;
   }
+  
+  final public function getPDO() {
+    // load up the singletons....
+    $this->getConnection();
+    // ..and hand one back.
+    return self::$pdo;
+  }
 
   public function __destruct() {
     $this->conn = NULL;
     self::$pdo = NULL;
   }
 
-/*  public function setUp() {
-    $tableNames = array('User');
-    $conn = $this->conn;
-    if($conn) {
-      $dataSet = $conn->getConnection()->createDataSet($tableNames);
-    }
-  }*/
+  public function setUp() {
+    $entity = new TestEntity();
+    $entity->createTestTable($this->getPDO());
+  }
 
 }
 

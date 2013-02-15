@@ -6,7 +6,7 @@ namespace Assignment2;
  * Testing our UserEntity class.
  */
 
-class EntityGettersSettersTest
+class PDOEntityGettersSettersTest
   extends Assignment2TestCase {
 
   /**

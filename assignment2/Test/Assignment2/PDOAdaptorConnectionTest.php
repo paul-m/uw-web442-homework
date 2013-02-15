@@ -5,7 +5,7 @@ namespace Assignment2;
  * Testing our UserEntity class.
  */
 
-class PDOAdaptorLiveDBTest
+class PDOAdaptorConnectionTest
   extends Assignment2DBTestCase {
 
     /**
@@ -14,28 +14,42 @@ class PDOAdaptorLiveDBTest
   public function getDataSet() {
     return $this->createXMLDataSet(dirname(__FILE__).'/fixtures/User-db.xml');
   }
+
+  public function setUp() {
+    // Why is this enough????
+    $pdo = $this->getConnection();//->getConnection();
+  }
   
   /**
-   * @expectedException \Exception
+   * @expectedException \RuntimeException
    */
   public function testBadConnection() {
     $pdoa = new PDOAdaptor();
     $pdoa->connect();
   }
   
-  public function t__estGoodConnection() {
+/*  public function testGoodPDOConnection() {
     $pdoa = new PDOAdaptor();
     $pdoa->setEntity(new TestEntity());
     $pdo = $this->getConnection()->getConnection();
     $pdoa->connect($pdo);
     $this->assertTrue(TRUE);    
-  }
+  }*/
+
+/*  public function testDisconnect() {
+    $pdoa = new PDOAdaptor();
+    $pdoa->setEntity(new TestEntity());
+    $pdo = $this->getConnection()->getConnection();
+    $pdoa->connect($pdo);
+    $pdoa->disconnect();
+    $this->assertTrue(TRUE);    
+  }*/
 
   public function dbConnection() {
-  echo 'dbconnection';
     $data = array(
       array(
         array(
+          // Globals set by phpunit.xml
           'driver' => $GLOBALS['DB_DRIVER'],
           'dbname' => $GLOBALS['DB_DBNAME'],
           'host' => $GLOBALS['DB_HOST'],
@@ -51,34 +65,28 @@ class PDOAdaptorLiveDBTest
   /**
    * @dataProvider dbConnection
    */
-  public function te__stGoodArrayConnection($db) {
+  public function testGoodArrayConnection($db) {
     $pdoa = new PDOAdaptor();
     $pdoa->setDatabase($db);
     $pdoa->setEntity(new TestEntity());
-//    $pdo = $this->getConnection()->getConnection();
     $pdoa->connect();
     $this->assertTrue(TRUE);    
   }
   
-  public function t__estSelect() {
-    $pdoa = new PDOAdaptor();
-    $pdoa->setEntity(new TestEntity());
-    $pdo = $this->getConnection()->getConnection();
-    $pdoa->connect($pdo);
-    $pdoa->select('id', 1);
-    $this->assertTrue(TRUE);
+  public function testGoodConnectionString() {
+    $db = array(
+      'driver' => 'driver',
+      'dbname' => 'dbname',
+      'host' => 'host',
+      'port' => 'port',
+    );
+    // _pdoConnectionString is protected function, so we
+    // make a mocky stub.
+    $mock = new MockPDOAdaptorDB();
+    $mock->setDatabase($db);
+    //mysql:dbname=testdb;host=127.0.0.1
+    $this->assertEquals($mock->getPDOConnectionStringForTest(),
+      'driver:host=host;dbname=dbname');
   }
-
-  /**
-   * @TODO: Figure out how to make this a special test case
-   * @dataProvider dbConnection
-   */
-  public function t__estConnect($db) {
-    $pdoa = new PDOAdaptor();
-    $pdoa->setDatabase($db);
-    $pdoa->connect();
-    $this->assertTrue(TRUE);
-  }
-
 }
 

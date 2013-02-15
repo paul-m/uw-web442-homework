@@ -8,48 +8,6 @@ namespace Assignment2;
 
 class UserEntity implements PDOSchemaInterface {
 
-  protected $_data;
-  
-  protected $_pdo;
-  
-  protected function getPDO() {
-    $pdo = $this->_pdo;
-    if ($pdo) return $pdo;
-    $this->_pdo = new PDOAdaptor();
-  }
-
-  public function __get($name) {
-    $table = $this->getPDOAdaptorSchema();
-    $keyz = array_keys($table);
-    $tableName = reset($keyz);
-    $schema = $table[$tableName];
-    if (isset($schema[$name])) {
-      if (isset($this->_data[$name])) {
-        return $this->_data[$name];
-      }
-      else {
-        if (isset($this->_data[$name]['defaultValue'])) {
-          return $this->_data[$name]['defaultValue'];
-        }
-        return NULL;
-      }
-    }
-    throw new \RuntimeException('Unknown key.');
-  }
-
-  public function __set($name, $value) {
-    $table = $this->getPDOAdaptorSchema();
-    $keyz = array_keys($table);
-    $tableName = reset($keyz);
-    $schema = $table[$tableName];
-    if (isset($schema[$name])) {
-      // @TODO: check for type.
-      $this->_data[$name] = $value;
-      return;
-    }
-    throw new \RuntimeException('Unknown key.');
-  }
-
   public function getPDOAdaptorSchema() {
     return array(
       'User' => array(

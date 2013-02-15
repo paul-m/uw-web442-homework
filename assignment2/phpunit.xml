@@ -5,7 +5,7 @@
     <php>
       <!-- var name="DB_DSN" value="mysql:dbname=assignment2;host=localhost" -->
       <var name="DB_DRIVER" value="sqlite" />
-      <var name="DB_HOST" value="localhost" />
+      <var name="DB_HOST" value=":memory:" />
       <var name="DB_USER" value="root" />
       <var name="DB_PASSWD" value="root" />
       <var name="DB_DBNAME" value="assignment2" />
@@ -22,3 +22,4 @@
       </whitelist>
     </filter>
 </phpunit>
+

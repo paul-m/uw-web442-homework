@@ -24,13 +24,13 @@ abstract class Assignment2DBTestCase extends \PHPUnit_Extensions_Database_TestCa
     return $this->conn;
   }
 
-  public function setUp() {
+/*  public function setUp() {
     $tableNames = array('User');
     $conn = $this->conn;
     if($conn) {
       $dataSet = $conn->getConnection()->createDataSet($tableNames);
     }
-  }
+  }*/
 
 }
 

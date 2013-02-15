@@ -21,7 +21,7 @@ class PDOAdaptor implements PDOAdaptorInterface {
     $driver = '';
     $host = '';
     $dbname = '';
-    if (isset($cred['driver'])) { echo 'setting driver'; $driver = $cred['driver']; }
+    if (isset($cred['driver'])) $driver = $cred['driver'];
     if (isset($cred['host'])) $host = $cred['host'];
     if (isset($cred['dbname'])) $dbname = $cred['dbname'];
     if ('' == $driver) throw new \RuntimeException('no specified driver.');
@@ -38,7 +38,7 @@ class PDOAdaptor implements PDOAdaptorInterface {
     if (empty($pdo)) {
       // Grab the config.
       $connectionString = $this->_pdoConnectionString();
-      echo "\n$connectionString\n";
+      //echo "\n$connectionString\n";
       $cred = $this->_databaseConfig;
       if (!is_array($cred)) throw new \RuntimeException('No DB credentials.');
       // Some defaults.
@@ -49,7 +49,7 @@ class PDOAdaptor implements PDOAdaptorInterface {
       if (isset($cred['password'])) $password = $cred['password'];
       // New PDO object.
       try {
-        echo 'new pdo';
+        //echo 'new pdo';
         $pdo = new \PDO(
           $connectionString,
           $username,

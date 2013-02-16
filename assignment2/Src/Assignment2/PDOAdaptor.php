@@ -98,42 +98,42 @@ class PDOAdaptor implements PDOAdaptorInterface {
     $result = NULL;
     $table = $this->getEntityTable();
     $tableName = $this->getEntityTableName();
-    $sql = '';
+    $sql = "UPDATE $tableName SET ";
     // INSERT special cases
     if ($insert) {
       // Unset the ID column
       unset($record['id']);
-      $sql .= 'INSERT INTO ';
+      $sql = "INSERT INTO $tableName ";
     }
-    else {
-      $sql .= 'UPDATE  ';
-    }
-    $sql = ':table SET ';
-    
+
     $queryArray = array();
     // assemble basic ['columnname'] => value array
-    foreach($table as $columnName) {
+    foreach($table as $columnName => $info) {
       if (isset($record[$columnName])) {
         $queryArray[$columnName] = $record[$columnName];
       }
     }
+
     $sqlArray = array();
     // structure the query
     foreach($queryArray as $columnName => $value) {
-      $sqlArray .= ':c_' . $columnName . ' = :v_' . $columnName;
+      $sqlArray[] = ':c_' . $columnName . ' = :v_' . $columnName;
     }
+
     // Generate some SQL
     $sql .= implode(', ', $sqlArray);
+    echo ' ' . $sql . ' ';
+
     // Generate statement object.
     $statement = $this->_pdo->prepare($sql);
     // Bind values.
-    $statement->bindValue(':table', $tableName);
+    //$statement->bindValue(':table', $tableName);
     foreach($queryArray as $columnName => $value) {
-      $statement->bindValue(':c_' . $columnName, $columnName);
-      $statement->bindValue(':v_' . $columnName, $value);
+      $statement->bindValue(':c_' . $columnName, $columnName, \PDO::PARAM_STR);
+      $statement->bindValue(':v_' . $columnName, $value, $table[$columnName]['type']);
     }
     // Do the query.
-    return $statement->exec();
+    return $statement->execute();
   }
 
   public function delete($id) {

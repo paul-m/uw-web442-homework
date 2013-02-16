@@ -16,12 +16,6 @@ class PDOAdaptorCRUDTest
     return $this->createXMLDataSet(dirname(__FILE__).'/fixtures/User-db.xml');
   }
 
-/*  public function setUp() {
-    // Why is this enough????
-    //$pdo = $this->getConnection();//->getConnection();
-  }
-*/  
-
   public function t__estSelect() {
     $entity = new TestEntity();
     $adaptor = new PDOAdaptor();
@@ -36,16 +30,28 @@ class PDOAdaptorCRUDTest
     $this->assertEquals($stuff['lastname'], 'mitchum');
   }
 
-  public function testDelete() {
+  public function t__estDelete() {
     $entity = new TestEntity();
     $adaptor = new PDOAdaptor();
     $adaptor->setEntity($entity);
     $tableName = $adaptor->getEntityTableName();
 
-    $this->assertEquals(1, $this->getConnection()->getRowCount($tableName));
     $adaptor->connect($this->getPDO());
+    $this->assertEquals(1, $this->getConnection()->getRowCount($tableName));
     $stuff = $adaptor->delete(1);
     $this->assertEquals(0, $this->getConnection()->getRowCount($tableName));
+  }
+
+  public function testInsert() {
+    $entity = new TestEntity();
+    $adaptor = new PDOAdaptor();
+    $adaptor->setEntity($entity);
+    $tableName = $adaptor->getEntityTableName();
+
+    $adaptor->connect($this->getPDO());
+    $beforeCount = $this->getConnection()->getRowCount($tableName);
+    $stuff = $adaptor->insert(array('id'=>1, 'firstname' => 'jay', 'lastname'=> 'zeng'));
+    $this->assertNotEquals($beforeCount, $this->getConnection()->getRowCount($tableName));
   }
 
 

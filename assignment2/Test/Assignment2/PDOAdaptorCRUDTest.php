@@ -54,6 +54,25 @@ class PDOAdaptorCRUDTest
     $this->assertNotEquals($beforeCount, $this->getConnection()->getRowCount($tableName));
   }
 
+  /**
+   * This test is radically incomplete.
+   */
+  public function testUpdate() {
+    $entity = new TestEntity();
+    $adaptor = new PDOAdaptor();
+    $adaptor->setEntity($entity);
+    $tableName = $adaptor->getEntityTableName();
+
+    $adaptor->connect($this->getPDO());
+    // add a record.
+    $stuff = $adaptor->insert(array('id'=>1, 'firstname' => 'paul', 'lastname'=> 'mitchum'));
+    $beforeCount = $this->getConnection()->getRowCount($tableName);
+    // change the record.
+    $stuff = $adaptor->update(array('id'=>1, 'firstname' => 'jay', 'lastname'=> 'zeng'));
+    $afterCount = $this->getConnection()->getRowCount($tableName);
+    $this->assertEquals($beforeCount, $this->getConnection()->getRowCount($tableName));
+  }
+
 
 }
 

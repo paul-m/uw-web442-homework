@@ -91,20 +91,46 @@ class PDOAdaptor implements PDOAdaptorInterface {
   }
 
   public function insert($record) {
-    $this->update($record, TRUE);
+    $result = NULL;
+    $table = $this->getEntityTable();
+    $tableName = $this->getEntityTableName();
+    // Unset the ID column
+    unset($record['id']);
+    $sql = "INSERT INTO $tableName ";
+
+    $queryArray = array();
+    // assemble basic ['columnname'] => value array
+    foreach($table as $columnName => $info) {
+      if (isset($record[$columnName])) {
+        $queryArray[$columnName] = $record[$columnName];
+      }
+    }
+
+    $valArray = array();
+    // structure the query
+    foreach($queryArray as $columnName => $value) {
+      $valArray[] = ':v_' . $columnName;
+    }
+
+    // Assemble the query for eventual PDO substitution.
+    $sql .= '( ' . implode(', ', array_keys($queryArray)) . ' ) ';
+    $sql .= 'VALUES ( '. implode(', ', $valArray) . ' ) ';
+    
+    // Generate statement object.
+    $statement = $this->_pdo->prepare($sql);
+    // Bind values.
+    foreach($queryArray as $columnName => $value) {
+      $statement->bindValue(':v_' . $columnName, $value, $table[$columnName]['type']);
+    }
+    // Do the query.
+    return $statement->execute();
   }
 
-  public function update($record, $insert = FALSE) {
+  public function update($record) {
     $result = NULL;
     $table = $this->getEntityTable();
     $tableName = $this->getEntityTableName();
     $sql = "UPDATE $tableName SET ";
-    // INSERT special cases
-    if ($insert) {
-      // Unset the ID column
-      unset($record['id']);
-      $sql = "INSERT INTO $tableName ";
-    }
 
     $queryArray = array();
     // assemble basic ['columnname'] => value array
@@ -117,19 +143,18 @@ class PDOAdaptor implements PDOAdaptorInterface {
     $sqlArray = array();
     // structure the query
     foreach($queryArray as $columnName => $value) {
-      $sqlArray[] = ':c_' . $columnName . ' = :v_' . $columnName;
+      $sqlArray[] = $columnName . ' = :v_' . $columnName;
     }
 
     // Generate some SQL
     $sql .= implode(', ', $sqlArray);
-    echo ' ' . $sql . ' ';
 
     // Generate statement object.
     $statement = $this->_pdo->prepare($sql);
     // Bind values.
     //$statement->bindValue(':table', $tableName);
     foreach($queryArray as $columnName => $value) {
-      $statement->bindValue(':c_' . $columnName, $columnName, \PDO::PARAM_STR);
+      //$statement->bindValue(':c_' . $columnName, $columnName, \PDO::PARAM_STR);
       $statement->bindValue(':v_' . $columnName, $value, $table[$columnName]['type']);
     }
     // Do the query.

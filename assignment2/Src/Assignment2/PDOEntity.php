@@ -6,7 +6,7 @@ namespace Assignment2;
  * User entity class.
  */
 
-class PDOEntity {
+abstract class PDOEntity {
 
   protected $_data;
 

@@ -13,21 +13,31 @@ class PDOAdaptorCRUDTest
      */
   public function getDataSet() {
 //    return new \PHPUnit_Extensions_Database_DataSet_DefaultDataSet(array());
-    return $this->createXMLDataSet(dirname(__FILE__).'/fixtures/User-db.xml');
+    $set = $this->createXMLDataSet(__DIR__.'/fixtures/User-db.xml');
+//    echo implode($set->getTableNames(), ', ');
+    return $set;
   }
 
-  public function t__estSelect() {
+  public function testSelect() {
     $entity = new TestEntity();
     $adaptor = new PDOAdaptor();
     $adaptor->setEntity($entity);
-//    print_r($this->getPDO());
+    $tableName = $adaptor->getEntityTableName();
+
     $adaptor->connect($this->getPDO());
-    $stuff = $adaptor->select('firstname', 'paul');
-    //$stuff = reset($stuff);
-//    var_dump($stuff);
-    $this->assertEquals($stuff['id'], 1);
-    $this->assertEquals($stuff['firstname'], 'paul');
-    $this->assertEquals($stuff['lastname'], 'mitchum');
+    
+    // Can't get the fixture to work, so I'll insert some test data.
+    $adaptor->insert(array('id'=>1, 'firstname' => 'paul', 'lastname'=> 'mitchum'));
+
+    $record = $adaptor->select('id', 1);
+    $record = reset($record);
+    if (!empty($record)) {
+      $this->assertEquals($record['id'], 1);
+      $this->assertEquals($record['firstname'], 'paul');
+      $this->assertEquals($record['lastname'], 'mitchum');
+      return;
+    }
+    $this->assertTrue(FALSE, 'Unable to select a record');
   }
 
   public function t__estDelete() {
@@ -37,9 +47,18 @@ class PDOAdaptorCRUDTest
     $tableName = $adaptor->getEntityTableName();
 
     $adaptor->connect($this->getPDO());
-    $this->assertEquals(1, $this->getConnection()->getRowCount($tableName));
-    $stuff = $adaptor->delete(1);
-    $this->assertEquals(0, $this->getConnection()->getRowCount($tableName));
+
+    // Can't get the fixture to work, so I'll insert some test data.
+    $adaptor->insert(array('id'=>1, 'firstname' => 'paul', 'lastname'=> 'mitchum'));
+    
+    // Make sure there's a record.
+    $queryTable = $this->getConnection()->createQueryTable($tableName, "SELECT * FROM $tableName");
+    // Grab the first row so we can know its ID value.
+    $record = $queryTable->getRow(0);
+
+    $beforeCount = $this->getConnection()->getRowCount($tableName);
+    $adaptor->delete((integer)$record['id']);
+    $this->assertNotEquals($beforeCount, $this->getConnection()->getRowCount($tableName));
   }
 
   public function testInsert() {

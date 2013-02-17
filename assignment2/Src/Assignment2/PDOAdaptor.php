@@ -73,17 +73,16 @@ class PDOAdaptor implements PDOAdaptorInterface {
   public function select($column = '', $value = '') {
     $table = $this->getEntityTable();
     $tableName = $this->getEntityTableName();
-    // Why can't I use :table and bind a value to it?
-    $sql = "SELECT * FROM $tableName WHERE :column = :value";
+    $sql = "SELECT * FROM $tableName WHERE $column = :value";
+//    echo ' ' .$sql . ' ';
     try {
       $statement = $this->_pdo->prepare($sql);
 //      $statement->bindValue(':table', $tableName, \PDO::PARAM_STR);
-      $statement->bindValue(':column', $column, \PDO::PARAM_STR);
+//      $statement->bindValue(':column', $column, \PDO::PARAM_STR);
       $statement->bindValue(':value', $value, $table[$column]['type']);
       $statement->execute();
       $foo =  $statement->fetchAll(\PDO::FETCH_ASSOC);
-      var_dump($foo);
-      return $foo;//$statement->fetchAll(\PDO::FETCH_ASSOC);
+      return $foo;
     } catch (\Exception $e) {
       throw new \RuntimeException('Attempting to SELECT without PDO object.');
     }
@@ -165,7 +164,7 @@ class PDOAdaptor implements PDOAdaptorInterface {
     $result = NULL;
     $table = $this->getEntityTable();
     $tableName = $this->getEntityTableName();
-    $sql = "DELETE FROM $tableName WHERE id=:id";
+    $sql = "DELETE FROM $tableName WHERE id = :id";
     try {
       $statement = $this->_pdo->prepare($sql);
 //      $statement->bindParam(':table', $tableName, \PDO::PARAM_STR);
@@ -174,6 +173,7 @@ class PDOAdaptor implements PDOAdaptorInterface {
     } catch (\Exception $e) {
       throw new \RuntimeException('Unable to delete.');
     }
+//    echo ' result: ' . $result;
     return $result;
   }
 

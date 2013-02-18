@@ -2,3 +2,4 @@ composer.phar
 vendor/
 coverage/
 host=*
+User.db

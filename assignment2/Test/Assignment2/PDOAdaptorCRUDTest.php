@@ -12,22 +12,17 @@ class PDOAdaptorCRUDTest
      * @return PHPUnit_Extensions_Database_DataSet_IDataSet
      */
   public function getDataSet() {
-//    return new \PHPUnit_Extensions_Database_DataSet_DefaultDataSet(array());
     $set = $this->createXMLDataSet(__DIR__.'/fixtures/User-db.xml');
-//    echo implode($set->getTableNames(), ', ');
     return $set;
   }
 
-  public function testSelect() {
+  public function te__stSelect() {
     $entity = new TestEntity();
     $adaptor = new PDOAdaptor();
     $adaptor->setEntity($entity);
     $tableName = $adaptor->getEntityTableName();
 
     $adaptor->connect($this->getPDO());
-    
-    // Can't get the fixture to work, so I'll insert some test data.
-    $adaptor->insert(array('id'=>1, 'firstname' => 'paul', 'lastname'=> 'mitchum'));
 
     $record = $adaptor->select('id', 1);
     $record = reset($record);
@@ -40,24 +35,15 @@ class PDOAdaptorCRUDTest
     $this->assertTrue(FALSE, 'Unable to select a record');
   }
 
-  public function t__estDelete() {
+  public function te__stDelete() {
     $entity = new TestEntity();
     $adaptor = new PDOAdaptor();
     $adaptor->setEntity($entity);
     $tableName = $adaptor->getEntityTableName();
 
     $adaptor->connect($this->getPDO());
-
-    // Can't get the fixture to work, so I'll insert some test data.
-    $adaptor->insert(array('id'=>1, 'firstname' => 'paul', 'lastname'=> 'mitchum'));
-    
-    // Make sure there's a record.
-    $queryTable = $this->getConnection()->createQueryTable($tableName, "SELECT * FROM $tableName");
-    // Grab the first row so we can know its ID value.
-    $record = $queryTable->getRow(0);
-
     $beforeCount = $this->getConnection()->getRowCount($tableName);
-    $adaptor->delete((integer)$record['id']);
+    $adaptor->delete(1);
     $this->assertNotEquals($beforeCount, $this->getConnection()->getRowCount($tableName));
   }
 
@@ -69,8 +55,11 @@ class PDOAdaptorCRUDTest
 
     $adaptor->connect($this->getPDO());
     $beforeCount = $this->getConnection()->getRowCount($tableName);
+//    echo ' before: ' . $beforeCount;
     $stuff = $adaptor->insert(array('id'=>1, 'firstname' => 'jay', 'lastname'=> 'zeng'));
-    $this->assertNotEquals($beforeCount, $this->getConnection()->getRowCount($tableName));
+    $afterCount = $this->getConnection()->getRowCount($tableName);
+  //  echo ' after: ' . $afterCount;
+    $this->assertNotEquals($beforeCount, $afterCount);
   }
 
   /**
@@ -84,7 +73,7 @@ class PDOAdaptorCRUDTest
 
     $adaptor->connect($this->getPDO());
     // add a record.
-    $stuff = $adaptor->insert(array('id'=>1, 'firstname' => 'paul', 'lastname'=> 'mitchum'));
+//    $stuff = $adaptor->insert(array('firstname' => 'paul', 'lastname'=> 'mitchum'));
     $beforeCount = $this->getConnection()->getRowCount($tableName);
     // change the record.
     $stuff = $adaptor->update(array('id'=>1, 'firstname' => 'jay', 'lastname'=> 'zeng'));

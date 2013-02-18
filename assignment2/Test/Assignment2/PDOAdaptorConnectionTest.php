@@ -17,6 +17,7 @@ class PDOAdaptorConnectionTest
   }
 
   public function setUp() {
+    parent::setUp();
     // Why is this enough????
     //$pdo = $this->getConnection();//->getConnection();
   }

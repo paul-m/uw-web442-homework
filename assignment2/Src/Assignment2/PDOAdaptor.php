@@ -129,6 +129,9 @@ class PDOAdaptor implements PDOAdaptorInterface {
     $result = NULL;
     $table = $this->getEntityTable();
     $tableName = $this->getEntityTableName();
+    $id = $record['id'];
+    if (empty($id)) throw new \RuntimeException('no id to update');
+    unset($record['id']);
     $sql = "UPDATE $tableName SET ";
 
     $queryArray = array();
@@ -147,11 +150,13 @@ class PDOAdaptor implements PDOAdaptorInterface {
 
     // Generate some SQL
     $sql .= implode(', ', $sqlArray);
+    $sql .= ' WHERE id = :id';
 
     // Generate statement object.
     $statement = $this->_pdo->prepare($sql);
     // Bind values.
     //$statement->bindValue(':table', $tableName);
+    $statement->bindValue(':id', $id);
     foreach($queryArray as $columnName => $value) {
       //$statement->bindValue(':c_' . $columnName, $columnName, \PDO::PARAM_STR);
       $statement->bindValue(':v_' . $columnName, $value, $table[$columnName]['type']);

@@ -16,7 +16,7 @@ class PDOAdaptorCRUDTest
     return $set;
   }
 
-  public function te__stSelect() {
+  public function testSelect() {
     $entity = new TestEntity();
     $adaptor = new PDOAdaptor();
     $adaptor->setEntity($entity);
@@ -72,8 +72,7 @@ class PDOAdaptorCRUDTest
     $tableName = $adaptor->getEntityTableName();
 
     $adaptor->connect($this->getPDO());
-    // add a record.
-//    $stuff = $adaptor->insert(array('firstname' => 'paul', 'lastname'=> 'mitchum'));
+
     $beforeCount = $this->getConnection()->getRowCount($tableName);
     // change the record.
     $stuff = $adaptor->update(array('id'=>1, 'firstname' => 'jay', 'lastname'=> 'zeng'));

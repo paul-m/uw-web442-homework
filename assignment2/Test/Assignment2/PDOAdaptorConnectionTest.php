@@ -12,16 +12,11 @@ class PDOAdaptorConnectionTest
      * @return PHPUnit_Extensions_Database_DataSet_IDataSet
      */
   public function getDataSet() {
+    // We don't care about the data set for this set of tests.
+    // We only care about errors thrown during connection.
     return new \PHPUnit_Extensions_Database_DataSet_DefaultDataSet(array());
-//    return $this->createXMLDataSet(dirname(__FILE__).'/fixtures/User-db.xml');
   }
 
-  public function setUp() {
-    parent::setUp();
-    // Why is this enough????
-    //$pdo = $this->getConnection();//->getConnection();
-  }
-  
   /**
    * @expectedException \RuntimeException
    */
@@ -33,7 +28,7 @@ class PDOAdaptorConnectionTest
   public function testGoodPDOConnection() {
     $pdoa = new PDOAdaptor();
     $pdoa->setEntity(new TestEntity());
-    $pdo = $this->getConnection()->getConnection();
+    $pdo = $this->getPDO();
     $pdoa->connect($pdo);
     $this->assertTrue(TRUE);    
   }
@@ -41,7 +36,7 @@ class PDOAdaptorConnectionTest
   public function testDisconnect() {
     $pdoa = new PDOAdaptor();
     $pdoa->setEntity(new TestEntity());
-    $pdo = $this->getConnection()->getConnection();
+    $pdo = $this->getPDO();
     $pdoa->connect($pdo);
     $pdoa->disconnect();
     $this->assertTrue(TRUE);    

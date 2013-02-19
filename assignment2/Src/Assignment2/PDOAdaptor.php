@@ -175,6 +175,8 @@ class PDOAdaptor implements PDOAdaptorInterface {
 //      $statement->bindParam(':table', $tableName, \PDO::PARAM_STR);
       $statement->bindParam(':id', $value, $table['id']['type']);
       $result = $statement->execute();
+      $err = $statement->errorInfo();
+      echo $err[2];
     } catch (\Exception $e) {
       throw new \RuntimeException('Unable to delete.');
     }

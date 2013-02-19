@@ -43,6 +43,7 @@ class PDOAdaptorCRUDTest
 
     $adaptor->connect($this->getPDO());
     $beforeCount = $this->getConnection()->getRowCount($tableName);
+    echo ' before: ' . $beforeCount;
     $adaptor->delete(1);
     $this->assertNotEquals($beforeCount, $this->getConnection()->getRowCount($tableName));
   }

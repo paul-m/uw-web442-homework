@@ -31,7 +31,7 @@ class PDOAdaptor implements PDOAdaptorInterface {
     if ('' == $dbname) throw new \RuntimeException('no specified database.');
     $pdoConnectionString = $driver .
       ':host=' . $host;
-    if ($port != '') $pdoConnectionString .= ':' . $port;
+    if ($port != '') $pdoConnectionString .= ';port=' . $port;
     $pdoConnectionString .= ';dbname=' . $dbname;
     return $pdoConnectionString;
   }
@@ -50,7 +50,7 @@ class PDOAdaptor implements PDOAdaptorInterface {
       if (isset($cred['username'])) $username = $cred['username'];
       if (isset($cred['password'])) $password = $cred['password'];
       // New PDO object.
-      try {
+//      try {
         //echo 'new pdo';
         $pdo = new \PDO(
           $connectionString,
@@ -58,9 +58,9 @@ class PDOAdaptor implements PDOAdaptorInterface {
           $password
         );
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-      } catch (\Exception $e) {
+/*      } catch (\Exception $e) {
         throw new \RuntimeException('unable to connect because bad PDO.');
-      }
+      }*/
     }
     $this->_pdo = $pdo;
     if (!$this->_pdo) throw new \RuntimeException('Unable to connect.');

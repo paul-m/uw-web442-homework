@@ -83,7 +83,7 @@ class PDOAdaptorConnectionTest
     $mock->setDatabase($db);
     // first with the port...
     $this->assertEquals($mock->getPDOConnectionStringForTest(),
-      'driver:host=host:port;dbname=dbname');
+      'driver:host=host;port=port;dbname=dbname');
     // remove the port.
     unset($db['port']);
     $mock->setDatabase($db);

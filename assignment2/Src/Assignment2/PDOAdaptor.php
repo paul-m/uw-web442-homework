@@ -50,8 +50,7 @@ class PDOAdaptor implements PDOAdaptorInterface {
       if (isset($cred['username'])) $username = $cred['username'];
       if (isset($cred['password'])) $password = $cred['password'];
       // New PDO object.
-//      try {
-        //echo 'new pdo';
+      try {
         $pdo = new \PDO(
           $connectionString,
           $username,
@@ -170,13 +169,16 @@ class PDOAdaptor implements PDOAdaptorInterface {
     $table = $this->getEntityTable();
     $tableName = $this->getEntityTableName();
     $sql = "DELETE FROM $tableName WHERE id = :id";
+//    $records = $this->select('id', $id);
+//    var_dump($records);
+
     try {
       $statement = $this->_pdo->prepare($sql);
-//      $statement->bindParam(':table', $tableName, \PDO::PARAM_STR);
+//      echo ' ' . $table['id']['type'] . ' ';
       $statement->bindParam(':id', $value, $table['id']['type']);
       $result = $statement->execute();
-      $err = $statement->errorInfo();
-      echo $err[2];
+//      $err = $statement->errorInfo();
+//      echo $err[2];
     } catch (\Exception $e) {
       throw new \RuntimeException('Unable to delete.');
     }

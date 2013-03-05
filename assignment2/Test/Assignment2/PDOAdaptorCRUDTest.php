@@ -35,6 +35,20 @@ class PDOAdaptorCRUDTest
     $this->assertTrue(FALSE, 'Unable to select a record');
   }
 
+  /**
+   * @expectedException \RuntimeException
+   */
+  public function testBadSelect() {
+    $entity = new TestEntity();
+    $adaptor = new PDOAdaptor();
+    $adaptor->setEntity($entity);
+    $tableName = $adaptor->getEntityTableName();
+
+    $adaptor->connect();
+
+    $record = $adaptor->select('id', 1);
+  }
+
   public function te__stDelete() {
     $entity = new TestEntity();
     $adaptor = new PDOAdaptor();
